@@ -1,8 +1,8 @@
 package example.application.service.booking;
 
-import example.domain.model.booking.BookingNumber;
-import example.domain.model.booking.Cargo;
-import example.domain.model.booking.Voyage;
+import example.domain.model.booking.*;
+import example.domain.model.cargo.Cargo;
+import example.domain.model.voyage.Voyage;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,14 +19,13 @@ public class BookingService {
      * @param cargo
      * @return
      */
+    Booking canBook(Voyage voyage, Cargo cargo) {
+
+        BookingContext bookingContext = new BookingContext(
+                voyage, new BookingPolicy(), cargo);
+        return bookingContext.canBook();
+    }
     BookingNumber booking(Voyage voyage, Cargo cargo) {
-
-        // TODO ビジネスルールの明示（クラスを使って）
-        // TODO ビジネスロジックの記述をdomain.modelに移動
-        double maxBooking = voyage.capacity() * 1.1 ;
-        if (voyage.bookedSize() + cargo.size() > maxBooking)
-            throw new IllegalStateException("最大積載量オーバー");
-
         return BookingNumber.generate();
     }
 }
