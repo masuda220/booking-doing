@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+    id 'org.dddjava.jig-gradle-plugin' version '2020.9.2'
+}
+
+group 'example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    jcenter()
+}
+
+sourceCompatibility = '11'
+targetCompatibility = '11'
+
+def defaultEncoding = 'UTF-8'
+
+[AbstractCompile, Javadoc].each {
+    tasks.withType(it).each { it.options.encoding = defaultEncoding }
+}
+
+dependencies {
+    implementation platform('org.springframework.boot:spring-boot-dependencies:2.3.3.RELEASE')
+
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(group: 'org.junit.vintage')
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jig {
+    linkPrefix = "https://github.com/system-sekkei/library/tree/master/src/main/java"
+}
+
+[compileJava, processResources]*.shouldRunAfter(clean)
+jigReports.dependsOn(clean, classes)
