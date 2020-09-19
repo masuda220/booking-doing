@@ -12,7 +12,14 @@ public class Cargo {
         this.size = size;
     }
 
-    public boolean isSmallerThan(Size other) {
-        return size.isSmallerThan(other);
+    public boolean isLargerThan(Size other) {
+        return size.isLargerThan(other);
+    }
+
+    @Override
+    public String toString() {
+        return "Cargo{" +
+                "size=" + size +
+                '}';
     }
 }

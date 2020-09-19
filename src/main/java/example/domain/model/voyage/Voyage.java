@@ -1,6 +1,12 @@
 package example.domain.model.voyage;
 
+import example.domain.model.booking.Booking;
 import example.domain.model.booking.BookingPolicy;
+import example.domain.model.cargo.Cargo;
+import example.domain.model.cargo.CargoSet;
+import example.domain.model.route.Destination;
+import example.domain.model.route.Origin;
+import example.domain.model.route.Route;
 import example.domain.model.type.Size;
 
 import java.time.LocalDate;
@@ -9,30 +15,41 @@ import java.time.LocalDate;
  * 航海
  */
 public class Voyage {
-    Origin origin;
-    Destination destination;
+    Route route;
     LocalDate departure;
 
+    BookingPolicy bookingPolicy;
     Size capacity;
-    Size bookedTotal; // TODO CargoSetで集計する
+    CargoSet cargoSet;
 
-    private Voyage(Size capacity, Size bookedSize) {
+    private Voyage(Size capacity, BookingPolicy bookingPolicy, CargoSet cargoSet) {
         this.capacity = capacity;
-        this.bookedTotal = bookedSize;
+        this.bookingPolicy = bookingPolicy;
+        this.cargoSet = cargoSet;
     }
 
-    // TODO Cargoセットへの変更
-    public Voyage addBooked(Size booked) {
-        return new Voyage(capacity, this.bookedTotal.add(booked));
+    public Voyage addCargo(Cargo cargo) {
+        CargoSet result = cargoSet.addCargo(cargo);
+        return new Voyage(capacity, bookingPolicy, result);
     }
 
-    // TODO BookingPolicy の適用
-    public Size remains(BookingPolicy bookingPolicy) {
-        return capacity.subtract(bookedTotal);
+    public Booking canBook(Cargo cargo) {
+        Size max = bookingPolicy.sizeMax(capacity);
+        Size remains = max.subtract(cargoSet.total());
+        if (cargo.isLargerThan(remains)) return Booking.できない;
+        return Booking.できる;
     }
 
-    public static Voyage create(Size capacity) {
-        Size booked = new Size(0);
-        return new Voyage(capacity, booked);
+    public static Voyage create(Size capacity, BookingPolicy bookingPolicy) {
+        return new Voyage(capacity,bookingPolicy, CargoSet.EMPTY);
+    }
+
+    @Override
+    public String toString() {
+        return "Voyage{" +
+                ", bookingPolicy=" + bookingPolicy +
+                ", capacity=" + capacity +
+                ", cargoSet=" + cargoSet +
+                '}';
     }
 }

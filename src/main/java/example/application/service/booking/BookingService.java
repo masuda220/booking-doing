@@ -11,21 +11,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class BookingService {
 
-    // TODO コマンドとクエリーの分離
-
     /**
-     * 限度を超えていなかったら予約して予約番号を返す
-     * @param voyage
-     * @param cargo
-     * @return
+     * 予約可能か確認する
      */
     Booking canBook(Voyage voyage, Cargo cargo) {
-
-        BookingContext bookingContext = new BookingContext(
-                voyage, new BookingPolicy(), cargo);
-        return bookingContext.canBook();
+        return voyage.canBook(cargo);
     }
+
+    /**
+     * 予約を記録して、予約番号を返す
+     */
     BookingNumber booking(Voyage voyage, Cargo cargo) {
+        // ToDo 予約を記録する
         return BookingNumber.generate();
     }
 }
