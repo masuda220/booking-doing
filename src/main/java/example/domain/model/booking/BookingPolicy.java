@@ -4,7 +4,7 @@ import example.domain.model.type.Percent;
 import example.domain.model.type.Size;
 
 /**
- * ブッキングポリシー
+ * *ブッキングポリシー
  */
 public class BookingPolicy {
     Percent percent;
