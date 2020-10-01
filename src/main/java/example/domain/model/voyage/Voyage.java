@@ -7,6 +7,7 @@ import example.domain.model.cargo.CargoSet;
 import example.domain.model.route.Destination;
 import example.domain.model.route.Origin;
 import example.domain.model.route.Route;
+import example.domain.model.route.Schedule;
 import example.domain.model.type.Size;
 
 import java.time.LocalDate;
@@ -16,7 +17,7 @@ import java.time.LocalDate;
  */
 public class Voyage {
     Route route;
-    LocalDate departure;
+    Schedule schedule;
 
     BookingPolicy bookingPolicy;
     Size capacity;
